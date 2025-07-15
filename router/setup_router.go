@@ -1,8 +1,15 @@
 package router
 
-import "github.com/gin-gonic/gin"
+import (
+	"vk_test_marketplace/handlers"
+
+	"github.com/gin-gonic/gin"
+)
 
 func SetupRouter() *gin.Engine {
-	var r = gin.Default()
+	r := gin.Default()
+
+	r.POST("/sign_up", handlers.SignUp)
+
 	return r
 }
