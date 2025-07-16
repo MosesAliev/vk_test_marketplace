@@ -8,12 +8,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Регистрация пользователей
 func SignUp(c *gin.Context) {
 	var user model.User
 	err := c.BindJSON(&user)
 
 	if err != nil {
-		c.IndentedJSON(http.StatusBadRequest, model.ErrorResponse{Error: "string"})
+		c.IndentedJSON(http.StatusBadRequest, model.ErrorResponse{Error: "Некорректные данные"})
 
 		return
 	}

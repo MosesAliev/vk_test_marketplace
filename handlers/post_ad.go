@@ -9,6 +9,7 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
+// Размещение нового объявления
 func PostAd(c *gin.Context) {
 	signedToken := c.GetHeader("token")
 
@@ -39,5 +40,11 @@ func PostAd(c *gin.Context) {
 		return
 	}
 
+	claims, _ := jwtToken.Claims.(jwt.MapClaims)
+
+	ad.UserLogin = claims["login"].(string)
+
 	database.DB.Db.Save(&ad)
+
+	c.IndentedJSON(http.StatusOK, ad)
 }

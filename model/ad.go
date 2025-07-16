@@ -8,4 +8,6 @@ type Ad struct {
 	Description string
 	Image       string
 	Price       int
+	UserLogin   string `json:"-"`
+	IsYours     bool   `gorm:"-" json:"is_yours,omitempty"`
 }

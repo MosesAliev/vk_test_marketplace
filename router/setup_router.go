@@ -15,5 +15,7 @@ func SetupRouter() *gin.Engine {
 
 	r.POST("/post_ad", handlers.PostAd)
 
+	r.GET("/get_ads", handlers.GetAds)
+
 	return r
 }

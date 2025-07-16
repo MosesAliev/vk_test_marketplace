@@ -9,6 +9,7 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
+// Авторизация пользователей
 func SignIn(c *gin.Context) {
 	var user model.User
 	err := c.BindJSON(&user)
