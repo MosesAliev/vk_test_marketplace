@@ -1,8 +1,6 @@
 package handlers
 
 import (
-	"crypto/aes"
-	"log"
 	"net/http"
 	"vk_test_marketplace/database"
 	"vk_test_marketplace/model"
@@ -28,25 +26,6 @@ func SignUp(c *gin.Context) {
 		return
 	}
 
-	block, err := aes.NewCipher([]byte("secret_key_12345"))
-
-	if err != nil {
-		log.Println(err)
-
-		c.IndentedJSON(http.StatusInternalServerError, model.ErrorResponse{Error: "string"})
-
-		return
-	}
-
-	unencryptedPassword := user.Password
-	encryptedPassword := make([]byte, len([]byte(user.Password)))
-
-	block.Encrypt(encryptedPassword, []byte(user.Password))
-
-	user.Password = string(encryptedPassword)
-
 	database.DB.Db.Save(&user)
-
-	user.Password = unencryptedPassword
 	c.IndentedJSON(http.StatusOK, user)
 }
