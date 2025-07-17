@@ -27,6 +27,15 @@ func SignUp(c *gin.Context) {
 		return
 	}
 
+	err = user.IsValidPassword()
+
+	if err != nil {
+		c.IndentedJSON(http.StatusBadRequest, model.ErrorResponse{Error: err.Error()})
+
+		return
+	}
+
 	database.DB.Db.Save(&user)
+
 	c.IndentedJSON(http.StatusOK, user)
 }
