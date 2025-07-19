@@ -1,7 +1,9 @@
 package handlers
 
 import (
+	"log"
 	"net/http"
+	"strings"
 	"vk_test_marketplace/database"
 	"vk_test_marketplace/model"
 
@@ -36,6 +38,30 @@ func PostAd(c *gin.Context) {
 
 	if err != nil {
 		c.IndentedJSON(http.StatusBadRequest, model.ErrorResponse{Error: "некорректные данные"})
+
+		return
+	}
+
+	if len(ad.Title) > 50 {
+		c.IndentedJSON(http.StatusBadRequest, model.ErrorResponse{Error: "слишком большая длина заголовка"})
+
+		return
+	}
+
+	parts := strings.Split(ad.Image, ".")
+
+	if len(parts) == 0 {
+		log.Println(len(parts))
+
+		c.IndentedJSON(http.StatusBadRequest, model.ErrorResponse{Error: "недопустимый формат изображения"})
+
+		return
+	}
+
+	if parts[len(parts)-1] != "png" && parts[len(parts)-1] != "PNG" && parts[len(parts)-1] != "jpg" && parts[len(parts)-1] != "JPG" &&
+		parts[len(parts)-1] != "jpeg" && parts[len(parts)-1] != "JPEG" {
+		log.Println(parts[len(parts)-1])
+		c.IndentedJSON(http.StatusBadRequest, model.ErrorResponse{Error: "недопустимый формат изображения"})
 
 		return
 	}
