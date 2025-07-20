@@ -13,6 +13,7 @@ import (
 
 // Размещение нового объявления
 func PostAd(c *gin.Context) {
+	// Получение токена из хедера
 	signedToken := c.GetHeader("token")
 
 	secret := []byte("secret_key")
@@ -36,8 +37,15 @@ func PostAd(c *gin.Context) {
 	var ad model.Ad
 	err = c.BindJSON(&ad)
 
+	// Если пользователь неправильно заполнил форму для размещения объявления, то он получает ошибку
 	if err != nil {
 		c.IndentedJSON(http.StatusBadRequest, model.ErrorResponse{Error: "некорректные данные"})
+
+		return
+	}
+
+	if ad.Price < 0 {
+		c.IndentedJSON(http.StatusBadRequest, model.ErrorResponse{Error: "цена не может быть ниже 0"})
 
 		return
 	}
@@ -70,7 +78,7 @@ func PostAd(c *gin.Context) {
 
 	ad.UserLogin = claims["login"].(string)
 
-	database.DB.Db.Save(&ad)
+	database.DB.Db.Save(&ad) // Сохранение объявления в базе данных
 
 	c.IndentedJSON(http.StatusOK, ad)
 }

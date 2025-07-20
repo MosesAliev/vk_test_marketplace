@@ -13,8 +13,8 @@ import (
 
 // Отобржение ленты объявлений
 func GetAds(c *gin.Context) {
-	page := 1
-	pageParam, ok := c.GetQuery("page")
+	page := 1                           // По умолчанию показывается первая страница в ленту
+	pageParam, ok := c.GetQuery("page") // Получение номера страницы в виде строки
 
 	if ok {
 		var err error
@@ -35,7 +35,7 @@ func GetAds(c *gin.Context) {
 
 	maxPrice := math.MaxInt
 	minPrice := 0
-	minPriceStr, ok := c.GetQuery("min_price")
+	minPriceStr, ok := c.GetQuery("min_price") // Получение минимального значения цены в виде строки
 
 	if ok {
 		var err error
@@ -46,9 +46,15 @@ func GetAds(c *gin.Context) {
 
 			return
 		}
+
+		if minPrice < 0 {
+			c.IndentedJSON(http.StatusBadRequest, model.ErrorResponse{Error: "минимальная цена не должна быть меньше 0"})
+
+			return
+		}
 	}
 
-	maxPriceStr, ok := c.GetQuery("max_price")
+	maxPriceStr, ok := c.GetQuery("max_price") // Получение максимального значения цены в виде строки
 
 	if ok {
 		var err error
@@ -59,6 +65,12 @@ func GetAds(c *gin.Context) {
 
 			return
 		}
+
+		if maxPrice < 0 {
+			c.IndentedJSON(http.StatusBadRequest, model.ErrorResponse{Error: "максимальная цена не должна быть меньше 0"})
+
+			return
+		}
 	}
 
 	var Ads []model.Ad
@@ -66,6 +78,7 @@ func GetAds(c *gin.Context) {
 
 	order, _ := c.GetQuery("order")
 
+	// сортировка
 	if ok {
 		switch param {
 		case "price":
@@ -114,6 +127,7 @@ func GetAds(c *gin.Context) {
 
 		authorizedUser := claims["login"].(string)
 
+		// Отображение признака принадлежности объявления к пользователю
 		for i := range Ads {
 			if Ads[i].UserLogin == authorizedUser {
 				Ads[i].IsYours = true

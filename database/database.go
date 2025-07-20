@@ -2,6 +2,7 @@
 package database
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"vk_test_marketplace/model"
@@ -18,19 +19,19 @@ type Dbinstance struct {
 var DB Dbinstance
 
 func ConnectDB() {
-	// создаём URL для соединения с базой данных.
 	// Имя пользователя базы данных, пароль и имя базы данных
 	// берутся из переменных окружения,
 	// они описаны в файле .env
-	dsn :=
-		"host=localhost user=postgres password=5432 dbname=marketplace port=5432 sslmode=disable TimeZone=Europe/Moscow"
+	dsn := fmt.Sprintf(
+		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Europe/Moscow",
+		os.Getenv("DB_HOST"),
+		os.Getenv("DB_USER"),
+		os.Getenv("DB_PASSWORD"),
+		os.Getenv("DB_NAME"),
+		os.Getenv("DB_PORT"),
+	)
 
-	// ,
-	// os.Getenv("DB_USER"),
-	// os.Getenv("DB_PASSWORD"),
-	// os.Getenv("DB_NAME"),
-
-	// создаём подключение к базе данных.
+	// Подключение к базе данных.
 	// В &gorm.Config настраивается логер,
 	// который будет сохранять информацию
 	// обо всех активностях с базой данных.

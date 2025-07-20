@@ -9,13 +9,13 @@ import (
 func SetupRouter() *gin.Engine {
 	r := gin.Default()
 
-	r.POST("/sign_up", handlers.SignUp)
+	r.POST("/sign_up", handlers.SignUp) // регистрация
 
-	r.POST("/sign_in", handlers.SignIn)
+	r.POST("/sign_in", handlers.SignIn) // авторизация
 
-	r.POST("/post_ad", handlers.PostAd)
+	r.POST("/post_ad", handlers.PostAd) // публикация объявления
 
-	r.GET("/get_ads", handlers.GetAds)
+	r.GET("/get_ads", handlers.GetAds) // отображение объявлений
 
 	return r
 }

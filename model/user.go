@@ -12,6 +12,7 @@ type User struct {
 	Ads      []Ad `gorm:"foreignKey:UserLogin"`
 }
 
+// Проверка на наличие цифр в пароле
 func (user User) hasDigits() bool {
 	for _, r := range user.Password {
 		if unicode.IsDigit(r) {
@@ -22,6 +23,7 @@ func (user User) hasDigits() bool {
 	return false
 }
 
+// Проверка на наличие в пароле символов верхнего регистра
 func (user User) hasUppers() bool {
 	for _, r := range user.Password {
 		if unicode.IsUpper(r) {
@@ -32,6 +34,7 @@ func (user User) hasUppers() bool {
 	return false
 }
 
+// Проверка на наличие в пароле символов нижнего регистра
 func (user User) hasLowers() bool {
 	for _, r := range user.Password {
 		if unicode.IsLower(r) {
